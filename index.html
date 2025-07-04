@@ -499,11 +499,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.15);
             border-color: #1A1A1A;
         }
-        .modal-gallery-vertical .gallery-thumb-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
         .modal-gallery-vertical .gallery-thumb-item.active {
             border-color: #1A1A1A;
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
@@ -568,27 +563,35 @@
             100% { transform: translate(-50%, -50%) translateX(15px) translateY(-15px) rotate(360deg); }
         }
 
+        /* Animasi terbang bebas untuk lebah saat idle */
+        @keyframes beeFreeFlight {
+            0% { transform: translate(-50%, -50%) rotate(0deg) translateX(0) translateY(0); }
+            20% { transform: translate(-50%, -50%) rotate(45deg) translateX(50px) translateY(-30px); }
+            40% { transform: translate(-50%, -50%) rotate(90deg) translateX(0px) translateY(50px); }
+            60% { transform: translate(-50%, -50%) rotate(135deg) translateX(-50px) translateY(-30px); }
+            80% { transform: translate(-50%, -50%) rotate(180deg) translateX(0) translateY(0); }
+            100% { transform: translate(-50%, -50%) rotate(0deg) translateX(0) translateY(0); } /* Kembali ke posisi relatif 0,0 */
+        }
 
-        /* Jejak lebah (bukan serbuk) */
-        .cursor-trail-dot { /* Kelas baru untuk jejak lebah */
+
+        /* Jejak lebah (dot kuning memanjang) */
+        .trail-dot { 
             position: fixed;
-            width: 20px; /* Ukuran lebah jejak */
-            height: 20px;
-            pointer-events: none;
+            background-color: rgba(255, 204, 0, 0.8); /* Kuning transparan */
+            border-radius: 50%; /* Bulat */
+            width: 5px; /* Dot kecil */
+            height: 10px; /* Memanjang */
             opacity: 0;
-            animation: fadeOutTrailBee 0.8s ease-out forwards;
-            transform: translate(-50%, -50%); /* Pusatkan lebah jejak */
+            transform: translate(-50%, -50%) rotate(var(--angle, 0deg)); /* Rotasi acak */
+            animation: fadeOutTrailDot 0.6s ease-out forwards;
+            pointer-events: none;
             z-index: 9997;
-            background-image: url('bees.gif'); /* Gambar lebah untuk jejak */
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+        }
+        @keyframes fadeOutTrailDot {
+            0% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
         }
 
-        @keyframes fadeOutTrailBee {
-            0% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-        }
 
         /* Serbuk bunga yang berhamburan (hanya untuk burst idle dan click) */
         .pollen-burst-dot { 
@@ -616,7 +619,7 @@
                 cursor: default;
             }
             /* Sembunyikan semua efek kursor di mobile agar tidak mengganggu */
-            #flower-cursor, #bee-follower, .cursor-trail-dot, .pollen-burst-dot {
+            #flower-cursor, #bee-follower, .trail-dot, .pollen-burst-dot {
                 display: none !important;
             }
 
@@ -1008,7 +1011,7 @@
                 "https://via.placeholder.com/800x600/E0E0E0/333333?text=E0E0E0+Fitness+Tracker+9",
                 "https://via.placeholder.com/800x600/B0B0B0/333333?text=B0B0B0+Fitness+Tracker+10"
             ],
-            story: "Designed a clean and highly functional user interface for a mobile fitness tracking application. Key features include intuitive progress visualization, personalized workout routines, and social sharing capabilities. The design prioritizes readability and ease of data input for a seamless user journey. A comprehensive design system was developed to ensure consistency across all screens, improving both user experience and developer handover."
+            story: "Designed a clean and highly functional user interface for a mobile fitness tracking application. Key features include intuitive progress visualization, personalized workout routines, and social sharing capabilities. The design prioritizes readability and. A comprehensive design system was developed to ensure consistency across all screens, improving both user experience and developer handover."
         },
         6: {
             title: "Poster: 'Music Festival'",
@@ -1159,9 +1162,9 @@
     const flowerCursor = document.getElementById('flower-cursor'); // Bunga (kursor utama)
     const beeFollower = document.getElementById('bee-follower');   // Lebah (objek yang mengikuti)
     
-    let idleTimeout; // Timer untuk mendeteksi idle utama
-    let idleCircleAnimationTimeout; // Timer untuk fase mengelilingi
-    let idlePollenBurstInterval; // Interval untuk semburan serbuk saat idle
+    let idleDetectionTimer; // Timer untuk mendeteksi idle utama (4 detik)
+    let idleCycleInterval; // Interval untuk siklus terbang/getar (5 detik)
+    let idlePollenBurstInterval; // Interval untuk semburan serbuk saat bergetar
 
     let targetCursorX = 0; // Target X dari kursor mouse
     let targetCursorY = 0; // Target Y dari kursor mouse
@@ -1171,38 +1174,49 @@
     let currentBeeY = 0;    // Posisi Y lebah yang diperhalus
 
     let lastTrailDotTime = 0;
-    const trailDotInterval = 50; // Interval waktu (ms) untuk membuat titik jejak (lebah)
-    const maxTrailDots = 10;     // Jumlah maksimum titik jejak (lebah)
+    const trailDotInterval = 50; // Interval waktu (ms) untuk membuat titik jejak
+    const maxTrailDots = 10;     // Jumlah maksimum titik jejak
 
-    // Definisikan @keyframes dinamis (penting jika kode digabungkan)
-    const dynamicKeyframes = `
-        @keyframes beeVibrate {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            25% { transform: translate(-48%, -52%) rotate(1deg); }
-            50% { transform: translate(-50%, -50%) rotate(0deg); }
-            75% { transform: translate(-52%, -48%) rotate(-1deg); }
-            100% { transform: translate(-50%, -50%) rotate(0deg); }
-        }
-        @keyframes beeCircle { 
-            0% { transform: translate(-50%, -50%) translateX(15px) translateY(-15px) rotate(0deg); } /* Posisi awal relatif dari pusat bunga */
-            25% { transform: translate(-50%, -50%) translateX(20px) translateY(0px) rotate(90deg); }
-            50% { transform: translate(-50%, -50%) translateX(15px) translateY(15px) rotate(180deg); }
-            75% { transform: translate(-50%, -50%) translateX(0px) translateY(20px) rotate(270deg); } /* Menjauh sedikit */
-            100% { transform: translate(-50%, -50%) translateX(15px) translateY(-15px) rotate(360deg); }
-        }
-        @keyframes pollenBurst {
-            0% { opacity: 0.9; transform: scale(1) translateX(0) translateY(0); }
-            100% { opacity: 0; transform: scale(0) translateX(var(--dx)) translateY(var(--dy)); }
-        }
-        @keyframes fadeOutPollen {
-            0% { opacity: 0.8; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.5); }
-        }
-    `;
-    const styleSheet = document.createElement('style');
-    styleSheet.type = 'text/css';
-    styleSheet.innerText = dynamicKeyframes;
-    document.head.appendChild(styleSheet);
+    // Fungsi untuk membersihkan semua timer idle
+    function clearAllIdleTimers() {
+        clearTimeout(idleDetectionTimer);
+        clearInterval(idleCycleInterval);
+        clearInterval(idlePollenBurstInterval);
+        document.body.classList.remove('idle');
+        beeFollower.style.animation = 'none'; // Pastikan animasi lebah berhenti
+        beeFollower.style.opacity = 1; // Pastikan lebah terlihat saat bergerak
+    }
+
+    // Fungsi untuk memulai siklus idle lebah
+    function startIdleBeeCycle() {
+        // Hentikan siklus sebelumnya jika ada
+        clearAllIdleTimers(); // Bersihkan semua timer terlebih dahulu
+        document.body.classList.add('idle'); // Set body ke idle
+
+        // Siklus Idle: setiap 5 detik, lebah terbang bebas selama 5 detik lalu kembali
+        idleCycleInterval = setInterval(() => {
+            // Fase Terbang Bebas (5 detik)
+            beeFollower.style.animation = 'beeFreeFlight 5s linear forwards';
+            beeFollower.style.opacity = 1; // Pastikan lebah terlihat saat terbang
+            
+            // Setelah animasi terbang selesai, lebah kembali dan bergetar
+            setTimeout(() => {
+                if (document.body.classList.contains('idle')) { // Pastikan masih idle
+                    beeFollower.style.animation = 'beeVibrate 0.3s infinite ease-in-out';
+                    // Posisikan lebah ke tengah bunga (idle spot)
+                    beeFollower.style.left = `${currentFlowerX}px`;
+                    beeFollower.style.top = `${currentFlowerY - 15}px`;
+
+                    // Mulai semburan serbuk bunga saat bergetar
+                    clearInterval(idlePollenBurstInterval); // Pastikan interval lama berhenti
+                    idlePollenBurstInterval = setInterval(() => {
+                        burstPollen(currentBeeX, currentBeeY + 5, false, 4, 0.8); // Semburkan terus-menerus
+                    }, 200); // Setiap 200ms saat bergetar
+                }
+            }, 5000); // Setelah 5 detik terbang bebas
+
+        }, 5000); // Ulangi siklus setiap 5 detik
+    }
 
 
     // Update mouse position and manage cursor states
@@ -1211,66 +1225,35 @@
         targetCursorY = e.clientY;
         
         // --- LOGIKA SAAT KURSOR BERGERAK ---
-        beeFollower.style.opacity = 1; // Lebah terlihat saat bergerak
-        beeFollower.style.animation = 'none'; // Hentikan animasi bergetar/melingkar
-        
-        // Hapus kelas 'idle' dari body
-        document.body.classList.remove('idle');
+        clearAllIdleTimers(); // Hentikan semua animasi idle jika mouse bergerak
+        beeFollower.style.opacity = 1; // Lebah terlihat saat mengikuti
 
-        // Bersihkan semua timer/interval idle yang mungkin sedang berjalan
-        clearTimeout(idleTimeout);
-        clearTimeout(idleCircleAnimationTimeout);
-        clearInterval(idlePollenBurstInterval);
-
-        // Buat jejak lebah
+        // Buat jejak dot kuning memanjang
         const now = Date.now();
         if (now - lastTrailDotTime > trailDotInterval) {
             lastTrailDotTime = now;
             const trailDot = document.createElement('div');
-            trailDot.classList.add('cursor-trail-dot'); // Ini adalah lebah jejak (menggunakan gambar lebah)
+            trailDot.classList.add('trail-dot'); // Menggunakan kelas 'trail-dot' baru
             
             // Posisi titik jejak sedikit di belakang lebah
             trailDot.style.left = `${currentBeeX + (Math.random() - 0.5) * 5}px`;
             trailDot.style.top = `${currentBeeY + (Math.random() - 0.5) * 5}px`;
             
+            // Atur sudut rotasi acak untuk dot memanjang
+            trailDot.style.setProperty('--angle', `${Math.random() * 360}deg`);
+
             document.body.appendChild(trailDot);
 
             // Hapus titik jejak lama
-            const currentTrailDots = document.querySelectorAll('.cursor-trail-dot');
+            const currentTrailDots = document.querySelectorAll('.trail-dot');
             if (currentTrailDots.length > maxTrailDots) {
                 currentTrailDots[0].remove();
             }
         }
 
-        // Mulai timer untuk mendeteksi idle lagi (delay 4 detik)
-        idleTimeout = setTimeout(() => {
-            // --- LOGIKA SAAT KURSOR IDLE (SETELAH 4 DETIK TIDAK BERGERAK) ---
-            document.body.classList.add('idle'); // Tambahkan kelas 'idle' ke body
-            
-            // Fase 1: Lebah mengelilingi selama 2 detik
-            beeFollower.style.opacity = 1;
-            beeFollower.style.animation = 'beeCircle 2s linear forwards'; // Lebah mengelilingi selama 2 detik
-
-            // Setel posisi awal lebah untuk mengelilingi (relative terhadap posisi bunga saat itu)
-            // currentBeeX dan currentBeeY akan diatur di animateCursorPositions
-            
-            idleCircleAnimationTimeout = setTimeout(() => {
-                // Setelah 2 detik mengelilingi, jika masih idle, masuk fase idle penuh
-                if (document.body.classList.contains('idle')) {
-                    // Fase 2: Lebah menempel pada bunga, bergetar, dan menyemburkan serbuk
-                    beeFollower.style.animation = 'beeVibrate 0.3s infinite ease-in-out'; // Lebah getar di tempat
-
-                    // Atur posisi lebah agar menempel di bunga (offset y dari bunga)
-                    // Ini juga diatur di animateCursorPositions
-                    
-                    // Mulai semburan serbuk bunga secara terus-menerus
-                    idlePollenBurstInterval = setInterval(() => {
-                        // Semburkan dari posisi lebah
-                        burstPollen(currentBeeX, currentBeeY + 5, false, 4, 0.8); // Serbuk kecil saat idle
-                    }, 200); // Setiap 200ms
-                }
-            }, 2000); // Durasi mengelilingi (2 detik)
-
+        // Mulai timer untuk mendeteksi idle
+        idleDetectionTimer = setTimeout(() => {
+            startIdleBeeCycle(); // Mulai siklus idle lebah setelah 4 detik
         }, 4000); // Deteksi idle utama setelah 4 detik tidak bergerak
     });
 
@@ -1285,41 +1268,36 @@
         
         // Lebah mengikuti posisi bunga kursor saat TIDAK idle
         if (!document.body.classList.contains('idle')) {
-            let lagFactorBee = 0.025; // Lebih lambat (4x delay) -> 0.1 / 4 = 0.025
+            let lagFactorBee = 0.025; // 4x lebih lambat dari bunga (0.1 / 4)
             currentBeeX += (currentFlowerX - currentBeeX) * lagFactorBee;
             currentBeeY += (currentFlowerY - 15 - currentBeeY) * lagFactorBee; // 15px di atas bunga
 
             beeFollower.style.left = `${currentBeeX}px`;
             beeFollower.style.top = `${currentBeeY}px`;
-            // Opacity sudah 1 saat bergerak
+            beeFollower.style.opacity = 1; // Pastikan lebah terlihat saat mengikuti
         } else {
-            // Saat idle, lebah menempel pada bunga (posisinya diatur relatif terhadap bunga)
-            // Posisikan lebah agar tetap di atas bunga, bahkan saat bunga bergerak sedikit
-            beeFollower.style.left = `${currentFlowerX}px`;
-            beeFollower.style.top = `${currentFlowerY - 15}px`; 
+            // Saat idle, posisi lebah diatur oleh siklus startIdleBeeCycle (keyframes)
+            // Jadi, kita tidak mengatur left/top di sini untuk menghindari konflik
+            // Opacity diatur di startIdleBeeCycle
         }
-
 
         requestAnimationFrame(animateCursorPositions);
     }
     animateCursorPositions(); // Start the animation loop
 
     // Function to burst pollen (used for both idle burst and click burst)
-    // Parameter baru: size, duration
-    function burstPollen(x, y, isClick = false, customSize = 0, customDuration = 0) {
+    function burstPollen(x, y, isClick = false) {
         const numPollen = isClick ? 150 : 5; // 150 serbuk saat klik, 5 jejak/idle
         const minDistance = isClick ? 20 : 5; // Menyebar lebih jauh saat klik
         const maxDistance = isClick ? (25 * 3) : 15; // Jarak sebaran 3x ukuran kursor bunga (25px * 3 = 75px)
         
-        // Ukuran partikel: 3x kursor (75px) / jumlah partikel untuk dapat ukuran kecil
-        const pollenSize = customSize > 0 ? customSize : (isClick ? 2 : 4); // Ukuran dot sangat kecil (2px)
-        const animationDuration = customDuration > 0 ? customDuration : (isClick ? 1 : 0.8); // Durasi animasi
+        const pollenSize = isClick ? 2 : 4; // Ukuran dot sangat kecil (2px) saat klik
+        const animationDuration = isClick ? 1 : 0.8; // Durasi animasi
 
         for (let i = 0; i < numPollen; i++) {
             const pollen = document.createElement('div');
-            pollen.classList.add('pollen-burst-dot'); // Gunakan kelas yang benar
+            pollen.classList.add('pollen-burst-dot'); 
             
-            // Atur ukuran dan durasi animasi berdasarkan parameter
             pollen.style.width = `${pollenSize}px`;
             pollen.style.height = `${pollenSize}px`;
             pollen.style.animation = `pollenBurst ${animationDuration}s ease-out forwards`;
@@ -1343,11 +1321,9 @@
 
     // Cursor Click Animation (Effect of pollen burst)
     document.addEventListener('mousedown', (e) => {
-        // Langsung semburkan serbuk bunga saat klik (dari posisi klik)
-        // Ukuran 3x kursor (75px) di sini tidak lagi ukuran dot-nya, tapi jarak sebarannya
-        burstPollen(e.clientX, e.clientY, true, 2); // 2px dot, isClick=true
+        burstPollen(e.clientX, e.clientY, true); // True untuk menandakan ini dari klik
     });
 });
-</script>
+    </script>
 </body>
 </html>
