@@ -1,0 +1,930 @@
+/* --- GLOBAL & TYPOGRAPHY --- */
+body {
+    font-family: 'Poppins', sans-serif; /* Font lebih modern dan artistik */
+    margin: 0;
+    padding: 0;
+    background-color: #F8F8F8; /* Background putih keabu-abuan sangat terang */
+    color: #333333; /* Teks default abu-abu gelap */
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    overflow-x: hidden; /* Mencegah scroll horizontal */
+    cursor: none; /* Sembunyikan kursor asli agar diganti custom */
+}
+
+.container {
+    width: 88%; /* Sedikit lebih lebar */
+    max-width: 1200px;
+    margin: 0 auto; /* Tengah secara horizontal */
+    padding: 50px 0; /* Padding vertikal lebih besar */
+}
+
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif; /* Font tegas untuk judul */
+    color: #1A1A1A; /* Warna judul hitam kuat */
+    text-align: center;
+    margin-bottom: 40px;
+}
+h1 {
+    font-size: 3.5em;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+h2 {
+    font-size: 2.8em;
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 50px;
+}
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 5px;
+    background-color: #1A1A1A; /* Aksen warna HITAM untuk judul */
+    border-radius: 3px;
+}
+
+section {
+    background-color: #FFFFFF; /* Background putih untuk section */
+    margin-bottom: 40px;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08); /* Bayangan halus tapi tegas */
+    border: 1px solid #EEEEEE;
+}
+
+/* --- ENTRANCE (SPLASH SCREEN) --- */
+#entrance-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1A1A1A; /* Latar belakang hitam */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Pastikan di paling depan */
+    opacity: 1;
+    transition: opacity 1s ease-out; /* Transisi fade out */
+    flex-direction: column;
+    gap: 20px;
+}
+#entrance-screen.fade-out {
+    opacity: 0;
+    visibility: hidden; /* Sembunyikan setelah fade out */
+}
+#entrance-screen img {
+    max-width: 200px;
+    max-height: 200px;
+    animation: bounceIn 1s ease-out; /* Animasi logo muncul */
+}
+#entrance-screen p {
+    color: #FFFFFF;
+    font-size: 1.5em;
+    font-family: 'Montserrat', sans-serif;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.5s forwards; /* Animasi teks muncul setelah logo */
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 1; }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+/* --- HEADER & NAVIGATION --- */
+header {
+    background: #FFFFFF;
+    padding: 25px 0;
+    border-bottom: 2px solid #EEEEEE;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 100;
+}
+
+.main-nav {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 40px;
+}
+.main-nav a {
+    text-decoration: none;
+    color: #555555;
+    font-weight: 600;
+    font-size: 1.1em;
+    transition: color 0.3s ease, transform 0.2s ease;
+    position: relative;
+    padding-bottom: 5px;
+}
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: #1A1A1A; /* Aksen warna HITAM */
+    transition: width 0.3s ease;
+}
+.main-nav a:hover {
+    color: #1A1A1A;
+    transform: translateY(-2px);
+}
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+/* --- MY CONTACT BUTTON (Fixed Position) --- */
+.my-contact-button-wrapper {
+    position: fixed;
+    top: 25px;
+    left: 30px;
+    z-index: 1001;
+    display: inline-block;
+}
+.my-contact-button {
+    background-color: #1A1A1A; /* Tombol hitam */
+    color: #FFFFFF;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 30px; /* Lebih bulat */
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.my-contact-button:hover {
+    background-color: #333333;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.my-contact-button i {
+    font-size: 1.2em;
+}
+
+/* --- CONTACT DROPDOWN --- */
+.contact-dropdown {
+    display: none; /* Default hidden */
+    position: absolute;
+    background-color: #FFFFFF;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.25);
+    padding: 15px;
+    z-index: 100;
+    left: 0;
+    top: calc(100% + 15px); /* Posisi di bawah tombol */
+    border-radius: 10px;
+    border: 1px solid #EEEEEE;
+    animation: fadeInDrop 0.3s ease-out;
+    flex-direction: column; /* Icon per baris */
+    gap: 10px; /* Jarak antar icon */
+}
+.contact-dropdown a {
+    text-decoration: none;
+    color: #333333;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1em;
+    font-weight: 500;
+}
+.contact-dropdown a:hover {
+    background-color: #F0F0F0;
+    transform: translateX(5px);
+}
+.contact-dropdown a i {
+    font-size: 1.5em; /* Ukuran icon */
+    color: #1A1A1A; /* Warna icon HITAM */
+}
+
+/* --- ABOUT ME SECTION --- */
+#about {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* Untuk animasi gambar */
+    overflow: hidden; /* Pastikan gambar tidak keluar saat animasi */
+    padding-top: 80px; /* Tambahkan padding agar ada ruang di atas gambar */
+}
+.profile-photo-wrapper {
+    width: 250px; /* Ukuran lebih besar */
+    height: 250px; /* Ukuran lebih besar */
+    border-radius: 0; /* Bentuk KOTAK */
+    overflow: hidden;
+    border: none; /* Hapus border */
+    box-shadow: 0 0 0 10px rgba(0,0,0,0.1); /* Efek ring hitam */
+    position: relative; /* Kembali ke posisi relatif di sini */
+    margin-bottom: 30px; /* Kembali ke margin-bottom untuk jarak dari teks */
+    z-index: 2;
+    transition: all 0.5s ease-out; /* Transisi untuk animasi scroll */
+    /* Pastikan gambar berada di tengah secara default (karena relative) */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* Hapus kelas .moved karena tidak lagi digunakan untuk efek geser samping */
+
+/* #about p {
+    padding-top: 230px;
+} */ /* Hapus padding-top karena gambar tidak lagi absolut di atas teks */
+
+/* --- PROFESSIONAL SKILLS SECTION --- */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding-top: 20px;
+}
+.skill-category {
+    background-color: #F0F0F0; /* Background abu-abu terang */
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 5px solid #1A1A1A; /* Aksen HITAM */
+}
+.skill-category:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.skill-category h3 {
+    color: #1A1A1A;
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.skill-category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.skill-category ul li {
+    background-color: #FFFFFF;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #EEEEEE;
+    color: #555555;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+.skill-category ul li:last-child {
+    margin-bottom: 0;
+}
+.skill-category ul li:hover {
+    background-color: #E0E0E0;
+}
+
+/* --- MY INTERESTS SECTION --- */
+.interests-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+.interests-list li {
+    background-color: #E9E9E9; /* Background abu-abu terang */
+    color: #444444;
+    padding: 15px 25px;
+    border-radius: 30px;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
+    font-weight: 500;
+}
+.interests-list li:hover {
+    background-color: #1A1A1A; /* Aksen HITAM saat hover */
+    color: #FFFFFF;
+    transform: translateY(-5px) scale(1.03);
+}
+.interests-list li i {
+    font-size: 1.3em;
+    color: #1A1A1A; /* Warna icon hitam */
+    transition: color 0.3s ease;
+}
+.interests-list li:hover i {
+    color: #FFFFFF; /* Warna icon putih saat hover */
+}
+
+/* --- MY MASTERPIECE (PORTFOLIO GRID) --- */
+.masterpiece-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 5px;
+    padding-top: 20px;
+}
+.masterpiece-item {
+    background-color: #FFFFFF;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+}
+.masterpiece-item:hover {
+    transform: scale(0.98);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    z-index: 1;
+}
+.masterpiece-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+.masterpiece-item p {
+    padding: 10px;
+    margin: 0;
+    font-weight: 600;
+    color: #1A1A1A;
+    text-align: center;
+    background-color: #F0F0F0;
+    font-size: 0.9em;
+}
+
+/* --- MASTERPIECE MODAL (BEHANCE-LIKE) --- */
+#masterpiece-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0,0,0,0.85);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content-wrapper {
+    background-color: #FFFFFF;
+    padding: 0;
+    border-radius: 0;
+    max-width: 900px;
+    height: 95vh;
+    overflow-y: scroll;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    position: relative;
+    animation: slideInUp 0.4s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+.modal-content-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+.modal-content-wrapper::-webkit-scrollbar-thumb {
+    background-color: #DDDDDD;
+    border-radius: 10px;
+}
+.modal-content-wrapper::-webkit-scrollbar-track {
+    background-color: #F8F8F8;
+    border-radius: 10px;
+}
+
+
+@keyframes slideInUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header-behance {
+    padding: 20px 30px;
+    border-bottom: 1px solid #EEEEEE;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    background-color: #FFFFFF;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.modal-header-behance .modal-project-title {
+    margin: 0;
+    font-size: 1.8em;
+    color: #1A1A1A;
+    text-align: left;
+    flex-grow: 1;
+}
+.close-modal-button {
+    font-size: 2.5em;
+    color: #555555;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    margin-left: 20px;
+}
+.close-modal-button:hover {
+    color: #1A1A1A;
+}
+
+.modal-body-behance {
+    padding: 30px;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.modal-main-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid #EEEEEE;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.modal-project-story {
+    color: #555555;
+    font-size: 1.05em;
+    text-align: justify;
+    margin-bottom: 30px;
+    padding-top: 10px;
+}
+
+.modal-gallery-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.modal-gallery-vertical .gallery-thumb-item {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    border: 2px solid transparent;
+}
+.modal-gallery-vertical .gallery-thumb-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    border-color: #1A1A1A;
+}
+.modal-gallery-vertical .gallery-thumb-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.modal-gallery-vertical .gallery-thumb-item.active {
+    border-color: #1A1A1A;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    transform: scale(1.02);
+}
+
+/* --- FOOTER --- */
+footer {
+    background: #1A1A1A;
+    color: #FFFFFF;
+    padding: 30px 0;
+    text-align: center;
+    font-size: 0.9em;
+    border-top: 5px solid #1A1A1A;
+}
+
+/* --- CURSOR EFFECT (BUNGA & SERBUK BUNGA & LEBAH) --- */
+#flower-cursor { /* Ini adalah DIV UTAMA UNTUK KURSOR BUNGA */
+    position: fixed;
+    width: 25px; /* Ukuran bunga */
+    height: 25px;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%); /* Pusatkan gambar */
+    background-image: url('flower.png'); /* Gambar bunga */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: left 0.1s linear, top 0.1s linear; /* Transisi posisi yang halus */
+}
+
+#bee-cursor { /* Ini adalah lebah yang muncul saat idle */
+    position: fixed; /* FIXED agar bisa mengikuti kursor secara independen */
+    width: 30px; /* Ukuran lebah */
+    height: 30px;
+    pointer-events: none;
+    z-index: 9999; /* Di atas bunga */
+    transform: translate(-50%, -50%); /* Pusatkan gambar lebah */
+    background-image: url('bees.png'); /* Gambar lebah */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0; /* Awalnya tersembunyi */
+    transition: opacity 0.5s ease-out; /* Transisi muncul/hilang */
+}
+
+/* Animasi bergetar untuk lebah saat idle */
+@keyframes beeVibrate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    25% { transform: translate(-48%, -52%) rotate(1deg); }
+    50% { transform: translate(-50%, -50%) rotate(0deg); }
+    75% { transform: translate(-52%, -48%) rotate(-1deg); }
+    100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+/* Kapan lebah terlihat dan beranimasi */
+/* Selector disesuaikan karena #bee-cursor sekarang fixed, bukan child */
+#flower-cursor.idle + #bee-cursor { /* Saat bunga idle, lebah muncul dan bergetar */
+    opacity: 1;
+    animation: beeVibrate 0.3s infinite ease-in-out;
+}
+
+.cursor-trail-dot {
+    position: fixed;
+    background-color: rgba(255, 204, 0, 0.8); /* Warna serbuk bunga (kuning) */
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeOutPollen 0.6s ease-out forwards; /* Animasi serbuk bunga memudar */
+    width: 3px; /* Sangat kecil */
+    height: 3px;
+    transform: scale(0);
+    z-index: 9997;
+}
+
+@keyframes fadeOutPollen {
+    0% { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.5); }
+}
+
+/* Serbuk bunga yang berhamburan dari lebah idle */
+.star-dot { 
+    position: fixed; /* Ubah ke fixed agar bisa lepas dari kursor dan menyebar */
+    background-color: rgba(255, 204, 0, 0.9); /* Serbuk bunga kuning cerah */
+    border-radius: 50%;
+    width: 4px; /* Ukuran partikel semburan */
+    height: 4px;
+    opacity: 0;
+    transform: scale(0);
+    animation: pollenBurst 0.8s ease-out forwards; /* Animasi semburan */
+    pointer-events: none; /* Penting */
+    z-index: 9996; /* Di bawah trail dots */
+}
+
+/* Keyframes for pollenBurst (defined in JS, but also here for clarity) */
+@keyframes pollenBurst {
+    0% { opacity: 0.9; transform: scale(1) translateX(0) translateY(0); }
+    100% { opacity: 0; transform: scale(0) translate(var(--dx), var(--dy)); } /* Menyebar */
+}
+
+/* NEW: Cursor Click Animation */
+.cursor-click-effect {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.8); /* Hitam, semi-transparan */
+    border-radius: 50%;
+    pointer-events: none;
+    animation: burstAndFade 0.5s ease-out forwards; /* Animasi pecah dan memudar */
+    z-index: 9999; /* Di atas semuanya */
+}
+
+@keyframes burstAndFade {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.8;
+        width: 10px; height: 10px; /* Ukuran awal dot */
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(2.5); /* Membesar */
+        opacity: 0.4;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+}
+
+
+/* --- RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    body {
+        cursor: default;
+    }
+    /* Sembunyikan semua efek kursor di mobile agar tidak mengganggu */
+    #flower-cursor, #bee-cursor, .cursor-trail-dot, .cursor-click-effect, .star-dot {
+        display: none !important;
+    }
+
+    .container {
+        width: 92%;
+        padding: 30px 0;
+    }
+    h1 {
+        font-size: 2.5em;
+        letter-spacing: 1px;
+    }
+    h2 {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+    h2::after {
+        width: 70px;
+        height: 4px;
+    }
+    section {
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    /* Header & Nav */
+    .main-nav {
+        flex-direction: column;
+        gap: 15px;
+        display: none;
+    }
+    .my-contact-button-wrapper {
+        top: 15px;
+        left: 15px;
+    }
+    .my-contact-button {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+    .my-contact-button i {
+        font-size: 1em;
+    }
+    .contact-dropdown {
+        min-width: 160px;
+        padding: 10px;
+    }
+    .contact-dropdown a {
+        font-size: 0.9em;
+        gap: 8px;
+    }
+    .contact-dropdown a i {
+        font-size: 1.2em;
+    }
+
+    /* About Me */
+    #about {
+        padding-top: 60px;
+    }
+    .profile-photo-wrapper {
+        width: 200px;
+        height: 200px;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+    }
+    #about p {
+        font-size: 1em;
+        padding-top: 0;
+    }
+
+    /* Skills */
+    .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .skill-category h3 {
+        font-size: 1.5em;
+    }
+    .skill-category ul li {
+        font-size: 1em;
+    }
+
+    /* Interests */
+    .interests-list {
+        gap: 15px;
+    }
+    .interests-list li {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+    .interests-list li i {
+        font-size: 1.2em;
+    }
+
+    /* Masterpiece Grid */
+    .masterpiece-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .masterpiece-item img {
+        height: 200px;
+    }
+    .masterpiece-item p {
+        font-size: 0.95em;
+    }
+
+    /* Modal */
+    .modal-content-wrapper {
+        max-width: 95%;
+        height: 98vh;
+        border-radius: 5px;
+    }
+    .modal-header-behance .modal-project-title {
+        font-size: 1.5em;
+    }
+    .close-modal-button {
+        font-size: 2em;
+    }
+    .modal-body-behance {
+        padding: 20px;
+    }
+    .modal-main-image {
+        margin-bottom: 20px;
+    }
+    .modal-project-story {
+        font-size: 0.95em;
+    }
+    .modal-gallery-vertical {
+        gap: 15px;
+    }
+    .modal-gallery-vertical .gallery-thumb-item {
+        width: 100%;
+    }
+}
+    </style>
+</head>
+<body>
+    <div id="entrance-screen">
+        <img src="https://via.placeholder.com/200x200/1A1A1A/FFFFFF?text=Z+Logo" alt="Logo Z">
+        <p>Igniting Creativity...</p>
+    </div>
+
+    <div class="my-contact-button-wrapper">
+        <button class="my-contact-button" id="myContactButton">
+            <i class="fas fa-handshake"></i> My Contact
+        </button>
+        <div class="contact-dropdown" id="contactDropdown">
+            <a href="https://wa.me/6281234567890" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://instagram.com/nama_instagram_anda" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://linkedin.com/in/nama-linkedin-anda" target="_blank"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+            <a href="tel:+6281234567890"><i class="fas fa-phone"></i> Call Me</a>
+            <a href="mailto:emailanda@example.com"><i class="fas fa-envelope"></i> Gmail</a>
+        </div>
+    </div>
+
+    <header>
+        <nav>
+            <ul class="main-nav">
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#skills">Professional Skills</a></li>
+                <li><a href="#interests">My Interests</a></li>
+                <li><a href="#masterpiece">My Masterpiece</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="about" class="container">
+            <h2>About Me</h2>
+            <div class="profile-photo-wrapper" id="profilePhotoWrapper">
+                <img src="https://via.placeholder.com/250x250/333333/FFFFFF?text=Foto+Profil" alt="Foto Profil Anda">
+            </div>
+            <p>Halo! Saya **[Nama Anda]**, seorang **[Profesi/Bidang Anda]** dengan semangat yang tak terbatas dalam dunia **[Sebutkan bidang minat utama, contoh: desain visual dan pengembangan web interaktif]**. Saya percaya bahwa setiap proyek adalah kanvas untuk menciptakan sesuatu yang unik, fungsional, dan penuh makna.</p>
+            <p>Dengan latar belakang di **[Sebutkan pengalaman atau pendidikan, contoh: desain grafis dan pemrograman frontend]**, saya selalu mencari cara baru untuk menggabungkan estetika yang menarik dengan fungsionalitas yang mulus. Saya bersemangat untuk membawa ide-ide inovatif menjadi kenyataan dan selalu siap untuk tantangan kreatif berikutnya.</p>
+        </section>
+
+        <section id="skills" class="container">
+            <h2>Professional Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Creative Tools</h3>
+                    <ul>
+                        <li><i class="fas fa-paint-brush"></i> Adobe Photoshop</li>
+                        <li><i class="fas fa-vector-square"></i> Adobe Illustrator</li>
+                        <li><i class="fas fa-cube"></i> Figma / Sketch</li>
+                        <li><i class="fas fa-video"></i> Adobe Premiere Pro</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Web Development</h3>
+                    <ul>
+                        <li><i class="fab fa-html5"></i> HTML5 & CSS3</li>
+                        <li><i class="fab fa-js"></i> JavaScript (ES6+)</li>
+                        <li><i class="fab fa-react"></i> React.js / Vue.js</li>
+                        <li><i class="fas fa-code"></i> Responsive Design</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Concepts & Others</h3>
+                    <ul>
+                        <li><i class="fas fa-lightbulb"></i> UI/UX Design</li>
+                        <li><i class="fas fa-palette"></i> Branding & Identity</li>
+                        <li><i class="fab fa-github"></i> Version Control (Git)</li>
+                        <li><i class="fas fa-file-alt"></i> Project Management</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="interests" class="container">
+            <h2>My Interests</h2>
+            <ul class="interests-list">
+                <li><i class="fas fa-camera-retro"></i> Photography</li>
+                <li><i class="fas fa-book-reader"></i> Creative Writing</li>
+                <li><i class="fas fa-gamepad"></i> Indie Game Design</li>
+                <li><i class="fas fa-headphones-alt"></i> Music Production</li>
+                <li><i class="fas fa-utensils"></i> Culinary Arts</li>
+                <li><i class="fas fa-compass"></i> Exploring New Tech</li>
+            </ul>
+        </section>
+
+        <section id="masterpiece" class="container">
+            <h2>My Masterpiece</h2>
+            <div class="masterpiece-grid">
+                <div class="masterpiece-item" data-project-id="1">
+                    <img src="https://via.placeholder.com/350x250/C0C0C0/333333?text=Artwork+1" alt="Artwork 1">
+                    <p>Digital Art: 'Urban Echoes'</p>
+                </div>
+                <div class="masterpiece-item" data-project-id="2">
+                    <img src="https://via.placeholder.com/350x250/A0A0A0/333333?text=Web+Layout+2" alt="Web Layout 2">
+                    <p>Web UI: 'Horizon Travel'</p>
+                </div>
+                <div class="masterpiece-item" data-project-id="3">
+                    <img src="https://via.placeholder.com/350x250/D0D0D0/333333?text=Brand+Logo+3" alt="Brand Logo 3">
+                    <p>Branding: 'Coffee Bean Co.'</p>
+                </div>
+                <div class="masterpiece-item" data-project-id="4">
+                    <img src="https://via.placeholder.com/350x250/C8C8C8/333333?text=Illustration+4" alt="Illustration 4">
+                    <p>Illustration: 'Forest Spirit'</p>
+                </div>
+                <div class="masterpiece-item" data-project-id="5">
+                    <img src="https://via.placeholder.com/350x250/B8B8B8/333333?text=App+Screen+5" alt="App Screen 5">
+                    <p>App UI: 'Fitness Tracker'</p>
+                </div>
+                <div class="masterpiece-item" data-project-id="6">
+                    <img src="https://via.placeholder.com/350x250/D8D8D8/333333?text=Poster+Design+6" alt="Poster Design 6">
+                    <p>Poster: 'Music Festival'</p>
+                </div>
+                <div class="masterpiece-item" data-project-id="7">
+                    <img src="https://via.placeholder.com/350x250/A8A8A8/333333?text=Icon+Set+7" alt="Icon Set 7">
+                    <p>Iconography: 'Tech Startup'</p>
+                </div>
+                <div class="masterpiece-item" data-project-id="8">
+                    <img src="https://via.placeholder.com/350x250/E0E0E0/333333?text=Website+Mockup+8" alt="Website Mockup 8">
+                    <p>Website: 'Portfolio V2'</p>
+                </div>
+                <div class="masterpiece-item" data-project-id="9">
+                    <img src="https://via.placeholder.com/350x250/B0B0B0/333333?text=Photo+Manipulation+9" alt="Photo Manipulation 9">
+                    <p>Photo Art: 'Dreamscape'</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="masterpiece-modal">
+        <div class="modal-content-wrapper">
+            <div class="modal-header-behance">
+                <h3 class="modal-project-title"></h3>
+                <span class="close-modal-button">&times;</span>
+            </div>
+            <div class="modal-body-behance">
+                <img id="modalMainImage" src="" alt="Main Project Image" class="modal-main-image">
+                <p class="modal-project-story"></p>
+                <div class="modal-gallery-vertical">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 [Nama Anda]. All rights reserved.</p>
+    </footer>
+
+    <div id="flower-cursor"></div>
+    <div id="bee-cursor"></div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
