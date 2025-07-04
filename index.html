@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Saya</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <button class="hamburger-menu" id="hamburgerMenu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1>Portofolio Saya</h1>
+            <nav>
+                <ul>
+                    <li><a href="#about">Tentang Saya</a></li>
+                    <li><a href="#skills">Keahlian Profesional</a></li>
+                    <li><a href="#interests">Minat</a></li>
+                    <li><a href="#portfolio">Portofolio</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <button class="close-sidebar" id="closeSidebar">&times;</button>
+        <h2>Kontak Saya</h2>
+        <ul>
+            <li><a href="https://wa.me/6281234567890" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp: +62 812-3456-7890</a></li>
+            <li><a href="https://instagram.com/nama_instagram_anda" target="_blank"><i class="fab fa-instagram"></i> Instagram: @nama_instagram_anda</a></li>
+            <li><a href="https://linkedin.com/in/nama-linkedin-anda" target="_blank"><i class="fab fa-linkedin-in"></i> LinkedIn: nama-linkedin-anda</a></li>
+            <li><a href="tel:+6281234567890"><i class="fas fa-phone"></i> Telepon: +62 812-3456-7890</a></li>
+        </ul>
+    </div>
+
+    <main>
+        <section id="about" class="container">
+            <h2>Tentang Saya</h2>
+            <p>Halo! Saya **[Nama Anda]**, seorang **[Profesi/Bidang Anda]** dengan minat besar dalam **[Sebutkan minat terkait profesional]**. Saya bersemangat untuk menciptakan solusi inovatif dan belajar hal-hal baru.</p>
+            <p>Saya memiliki pengalaman dalam **[Sebutkan beberapa pengalaman singkat atau keahlian utama, contoh: pengembangan web, desain grafis, analisis data]**. Saya selalu berusaha untuk meningkatkan diri dan memberikan yang terbaik dalam setiap proyek.</p>
+        </section>
+
+        <section id="skills" class="container">
+            <h2>Keahlian Profesional</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <h3>Bahasa Pemrograman</h3>
+                    <ul>
+                        <li>JavaScript</li>
+                        <li>Python</li>
+                        <li>HTML5</li>
+                        <li>CSS3</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <h3>Framework & Library</h3>
+                    <ul>
+                        <li>React.js</li>
+                        <li>Node.js</li>
+                        <li>Express.js</li>
+                        <li>Bootstrap</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <h3>Tools & Platform</h3>
+                    <ul>
+                        <li>Git & GitHub</li>
+                        <li>VS Code</li>
+                        <li>Figma</li>
+                        <li>Adobe Photoshop</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="interests" class="container">
+            <h2>Minat</h2>
+            <ul class="interests-list">
+                <li><span class="icon">&#127918;</span> Pengembangan Web</li>
+                <li><span class="icon">&#128187;</span> Kecerdasan Buatan</li>
+                <li><span class="icon">&#128218;</span> Membaca Buku Fiksi Ilmiah</li>
+                <li><span class="icon">&#127909;</span> Fotografi</li>
+                <li><span class="icon">&#127926;</span> Bermain Gitar</li>
+            </ul>
+        </section>
+
+        <section id="portfolio" class="container">
+            <h2>Portofolio Contoh</h2>
+            <div class="gallery">
+                <div class="gallery-item" data-id="1">
+                    <img src="https://via.placeholder.com/300x200?text=Proyek+A" alt="Proyek A">
+                    <p>Proyek A: Desain Website Responsif</p>
+                </div>
+                <div class="gallery-item" data-id="2">
+                    <img src="https://via.placeholder.com/300x200?text=Proyek+B" alt="Proyek B">
+                    <p>Proyek B: Aplikasi Mobile (UI/UX)</p>
+                </div>
+                <div class="gallery-item" data-id="3">
+                    <img src="https://via.placeholder.com/300x200?text=Proyek+C" alt="Proyek C">
+                    <p>Proyek C: Sistem Manajemen Data</p>
+                </div>
+                <div class="gallery-item" data-id="4">
+                    <img src="https://via.placeholder.com/300x200?text=Proyek+D" alt="Proyek D">
+                    <p>Proyek D: Ilustrasi Digital</p>
+                </div>
+                <div class="gallery-item" data-id="5">
+                    <img src="https://via.placeholder.com/300x200?text=Proyek+E" alt="Proyek E">
+                    <p>Proyek E: Kampanye Pemasaran Digital</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 [Nama Anda]. Semua Hak Dilindungi.</p>
+    </footer>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <img id="modalImage" src="" alt="Detail Gambar">
+            <h3 id="modalTitle"></h3>
+            <p id="modalDescription"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
