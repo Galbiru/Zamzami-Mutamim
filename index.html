@@ -18,7 +18,7 @@
             line-height: 1.6;
             scroll-behavior: smooth;
             overflow-x: hidden; /* Mencegah scroll horizontal */
-            /* cursor: none; */ /* BARIS INI DIHAPUS/DIKOMENTARI AGAR KURSOR DEFAULT MUNCUL */
+            cursor: default; /* Kursor asli terlihat */
         }
 
         .container {
@@ -266,55 +266,36 @@
             margin: 0 auto 20px auto;
             color: #555555;
             text-align: justify;
-            /* Padding-top disesuaikan karena gambar sudah di tengah dengan margin-bottom */
         }
 
         /* --- PROFESSIONAL SKILLS SECTION --- */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            padding-top: 20px;
+        #skills .container {
+            padding-top: 50px; /* Sesuaikan padding agar tidak terlalu dekat dengan about me */
         }
-        .skill-category {
-            background-color: #F0F0F0; /* Background abu-abu terang */
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 5px solid #1A1A1A; /* Aksen HITAM */
-        }
-        .skill-category:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .skill-category h3 {
-            color: #1A1A1A;
-            font-size: 1.8em;
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .skill-category ul {
+
+        .skills-list { /* Ubah dari skills-grid ke list sederhana */
             list-style: none;
             padding: 0;
             margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px; /* Spasi antar item */
         }
-        .skill-category ul li {
-            background-color: #FFFFFF;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            border: 1px solid #EEEEEE;
-            color: #555555;
+        .skills-list li {
+            background-color: #F0F0F0; /* Background abu-abu terang */
+            color: #444444;
+            padding: 15px 25px;
+            border-radius: 30px; /* Bentuk pil */
+            font-size: 1.1em;
             font-weight: 500;
-            transition: background-color 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
         }
-        .skill-category ul li:last-child {
-            margin-bottom: 0;
-        }
-        .skill-category ul li:hover {
-            background-color: #E0E0E0;
+        .skills-list li:hover {
+            background-color: #1A1A1A; /* Aksen HITAM saat hover */
+            color: #FFFFFF;
+            transform: translateY(-5px) scale(1.03);
         }
 
         /* --- MY INTERESTS SECTION --- */
@@ -351,7 +332,7 @@
             transition: color 0.3s ease;
         }
         .interests-list li:hover i {
-            color: #FFFFFF; /* Warna icon putih saat hover */
+            color: #FFFFFF;
         }
 
         /* --- MY MASTERPIECE (PORTFOLIO GRID) --- */
@@ -561,7 +542,7 @@
             pointer-events: none;
             z-index: 9999; /* Di atas bunga */
             transform: translate(-50%, -50%); /* Pusatkan gambar lebah */
-            background-image: url('bees.png'); /* Gambar lebah */
+            background-image: url('bees.gif'); /* Gambar lebah */
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -588,12 +569,33 @@
         }
 
 
-        /* Serbuk bunga yang berhamburan */
+        /* Jejak lebah (bukan serbuk) */
+        .cursor-trail-dot { /* Kelas baru untuk jejak lebah */
+            position: fixed;
+            width: 20px; /* Ukuran lebah jejak */
+            height: 20px;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeOutTrailBee 0.8s ease-out forwards;
+            transform: translate(-50%, -50%); /* Pusatkan lebah jejak */
+            z-index: 9997;
+            background-image: url('bees.gif'); /* Gambar lebah untuk jejak */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        @keyframes fadeOutTrailBee {
+            0% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+        }
+
+        /* Serbuk bunga yang berhamburan (hanya untuk burst idle dan click) */
         .pollen-burst-dot { 
             position: fixed;
             background-color: rgba(255, 204, 0, 0.9);
             border-radius: 50%;
-            width: 4px;
+            width: 4px; /* Ukuran default partikel */
             height: 4px;
             opacity: 0;
             transform: scale(0);
@@ -607,32 +609,6 @@
             100% { opacity: 0; transform: scale(0) translateX(var(--dx)) translateY(var(--dy)); }
         }
 
-        /* NEW: Cursor Click Animation */
-        .cursor-click-effect {
-            position: fixed;
-            background-color: rgba(0, 0, 0, 0.8);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: burstAndFade 0.5s ease-out forwards;
-            z-index: 9999;
-        }
-
-        @keyframes burstAndFade {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 0.8;
-                width: 10px; height: 10px;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(2.5);
-                opacity: 0.4;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 0;
-            }
-        }
-
 
         /* --- RESPONSIVENESS --- */
         @media (max-width: 768px) {
@@ -640,7 +616,7 @@
                 cursor: default;
             }
             /* Sembunyikan semua efek kursor di mobile agar tidak mengganggu */
-            #flower-cursor, #bee-follower, .cursor-trail-dot, .cursor-click-effect, .pollen-burst-dot {
+            #flower-cursor, #bee-follower, .cursor-trail-dot, .pollen-burst-dot {
                 display: none !important;
             }
 
@@ -821,34 +797,15 @@
 
         <section id="skills" class="container">
             <h2>Professional Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Creative Tools</h3>
-                    <ul>
-                        <li><i class="fas fa-paint-brush"></i> Adobe Photoshop</li>
-                        <li><i class="fas fa-vector-square"></i> Adobe Illustrator</li>
-                        <li><i class="fas fa-cube"></i> Figma / Sketch</li>
-                        <li><i class="fas fa-video"></i> Adobe Premiere Pro</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Web Development</h3>
-                    <ul>
-                        <li><i class="fab fa-html5"></i> HTML5 & CSS3</li>
-                        <li><i class="fab fa-js"></i> JavaScript (ES6+)</li>
-                        <li><i class="fab fa-react"></i> React.js / Vue.js</li>
-                        <li><i class="fas fa-code"></i> Responsive Design</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Concepts & Others</h3>
-                    <ul>
-                        <li><i class="fas fa-lightbulb"></i> UI/UX Design</li>
-                        <li><i class="fas fa-palette"></i> Branding & Identity</li>
-                        <li><i class="fab fa-github"></i> Version Control (Git)</li>
-                        <li><i class="fas fa-file-alt"></i> Project Management</li>
-                    </ul>
-                </div>
+            <div class="skills-list-wrapper">
+                <ul class="skills-list">
+                    <li>Leadership</li>
+                    <li>Communication</li>
+                    <li>Collaborative</li>
+                    <li>Team Work</li>
+                    <li>Public Speaking</li>
+                    <li>Management</li>
+                </ul>
             </div>
         </section>
 
@@ -856,11 +813,10 @@
             <h2>My Interests</h2>
             <ul class="interests-list">
                 <li><i class="fas fa-camera-retro"></i> Photography</li>
-                <li><i class="fas fa-book-reader"></i> Creative Writing</li>
-                <li><i class="fas fa-gamepad"></i> Indie Game Design</li>
-                <li><i class="fas fa-headphones-alt"></i> Music Production</li>
-                <li><i class="fas fa-utensils"></i> Culinary Arts</li>
-                <li><i class="fas fa-compass"></i> Exploring New Tech</li>
+                <li><i class="fas fa-video"></i> Videography</li>
+                <li><i class="fas fa-futbol"></i> Football</li>
+                <li><i class="fas fa-palette"></i> Art & Culture</li>
+                <li><i class="fas fa-plane"></i> Travelling</li>
             </ul>
         </section>
 
@@ -979,72 +935,72 @@
                         "https://via.placeholder.com/800x600/C8C8C8/333333?text=Urban+Echoes+4",
                         "https://via.placeholder.com/800x600/B8B8B8/333333?text=Urban+Echoes+5",
                         "https://via.placeholder.com/800x600/D8D8D8/333333?text=Urban+Echoes+6",
-                        "https://via.placeholder.com/800x600/A8A8A8/333333?text=Urban+Echoes+7",
-                        "https://via.placeholder.com/800x600/E0E0E0/333333?text=Urban+Echoes+8",
-                        "https://via.placeholder.com/800x600/B0B0B0/333333?text=Urban+Echoes+9",
-                        "https://via.placeholder.com/800x600/C0C0C0/333333?text=Urban+Echoes+10"
+                        "https://via.placeholder.com/800x600/A8A8A8/333333?text=A8A8A8+Urban+Echoes+7",
+                        "https://via.placeholder.com/800x600/E0E0E0/333333?text=E0E0E0+Urban+Echoes+8",
+                        "https://via.placeholder.com/800x600/B0B0B0/333333?text=B0B0B0+Urban+Echoes+9",
+                        "https://via.placeholder.com/800x600/C0C0C0/333333?text=C0C0C0+Urban+Echoes+10"
                     ],
                     story: "This digital artwork explores the abstract beauty of urban environments. It combines sharp lines with soft gradients, reflecting the contrast between man-made structures and the organic flow of city life. The use of vibrant colors aims to capture the hidden energy and unique character of the metropolis. <br><br>The composition uses dynamic angles and overlapping elements to create depth, inviting the viewer to explore its intricate details. The final piece was created after extensive experimentation with various digital painting techniques and color theory applications."
                 },
                 2: {
                     title: "Web UI: 'Horizon Travel'",
-                    mainImage: "https://via.placeholder.com/800x600/A0A0A0/333333?text=Horizon+Travel+Main",
+                    mainImage: "https://via.placeholder.com/800x600/A0A0A0/333333?text=A0A0A0+Horizon+Travel+Main",
                     thumbnails: [
-                        "https://via.placeholder.com/800x600/A0A0A0/333333?text=Horizon+Travel+1",
-                        "https://via.placeholder.com/800x600/C0C0C0/333333?text=Horizon+Travel+2",
-                        "https://via.placeholder.com/800x600/B0B0B0/333333?text=Horizon+Travel+3",
-                        "https://via.placeholder.com/800x600/D0D0D0/333333?text=Horizon+Travel+4",
-                        "https://via.placeholder.com/800x600/C8C8C8/333333?text=Horizon+Travel+5",
-                        "https://via.placeholder.com/800x600/B8B8B8/333333?text=Horizon+Travel+6",
-                        "https://via.placeholder.com/800x600/D8D8D8/333333?text=Horizon+Travel+7",
-                        "https://via.placeholder.com/800x600/A8A8A8/333333?text=Horizon+Travel+8",
-                        "https://via.placeholder.com/800x600/E0E0E0/333333?text=Horizon+Travel+9",
-                        "https://via.placeholder.com/800x600/B0B0B0/333333?text=Horizon+Travel+10"
+                        "https://via.placeholder.com/800x600/A0A0A0/333333?text=A0A0A0+Horizon+Travel+1",
+                        "https://via.placeholder.com/800x600/C0C0C0/333333?text=C0C0C0+Horizon+Travel+2",
+                        "https://via.placeholder.com/800x600/B0B0B0/333333?text=B0B0B0+Horizon+Travel+3",
+                        "https://via.placeholder.com/800x600/D0D0D0/333333?text=D0D0D0+Horizon+Travel+4",
+                        "https://via.placeholder.com/800x600/C8C8C8/333333?text=C8C8C8+Horizon+Travel+5",
+                        "https://via.placeholder.com/800x600/B8B8B8/333333?text=B8B8B8+Horizon+Travel+6",
+                        "https://via.placeholder.com/800x600/D8D8D8/333333?text=D8D8D8+Horizon+Travel+7",
+                        "https://via.placeholder.com/800x600/A8A8A8/333333?text=A8A8A8+Horizon+Travel+8",
+                        "https://via.placeholder.com/800x600/E0E0E0/333333?text=E0E0E0+Horizon+Travel+9",
+                        "https://via.placeholder.com/800x600/B0B0B0/333333?text=B0B0B0+Horizon+Travel+10"
                     ],
                     story: "A modern and intuitive UI design for a travel booking website. The focus was on creating a seamless user experience from search to checkout, with visually appealing destination showcases and easy navigation. Clean typography and a calming color palette enhance the user's journey. Extensive user research and A/B testing were performed to optimize the layout and call-to-action elements, resulting in a higher conversion rate for bookings."
         },
         3: {
             title: "Branding: 'Coffee Bean Co.'",
-            mainImage: "https://via.placeholder.com/800x600/D0D0D0/333333?text=Coffee+Bean+Co+Main",
+            mainImage: "https://via.placeholder.com/800x600/D0D0D0/333333?text=D0D0D0+Coffee+Bean+Co+Main",
             thumbnails: [
-                "https://via.placeholder.com/800x600/D0D0D0/333333?text=Coffee+Bean+Co+1",
-                "https://via.placeholder.com/800x600/C0C0C0/333333?text=Coffee+Bean+Co+2",
-                "https://via.placeholder.com/800x600/A0A0A0/333333?text=Coffee+Bean+Co+3",
-                "https://via.placeholder.com/800x600/B0B0B0/333333?text=Coffee+Bean+Co+4",
-                "https://via.placeholder.com/800x600/C8C8C8/333333?text=Coffee+Bean+Co+5",
-                "https://via.placeholder.com/800x600/B8B8B8/333333?text=Coffee+Bean+Co+6",
-                "https://via.placeholder.com/800x600/D8D8D8/333333?text=Coffee+Bean+Co+7",
-                "https://via.placeholder.com/800x600/A8A8A8/333333?text=Coffee+Bean+Co+8",
-                "https://via.placeholder.com/800x600/E0E0E0/333333?text=Coffee+Bean+Co+9",
-                "https://via.placeholder.com/800x600/B0B0B0/333333?text=Coffee+Bean+Co+10"
+                "https://via.placeholder.com/800x600/D0D0D0/333333?text=D0D0D0+Coffee+Bean+Co+1",
+                "https://via.placeholder.com/800x600/C0C0C0/333333?text=C0C0C0+Coffee+Bean+Co+2",
+                "https://via.placeholder.com/800x600/A0A0A0/333333?text=A0A0A0+Coffee+Bean+Co+3",
+                "https://via.placeholder.com/800x600/B0B0B0/333333?text=B0B0B0+Coffee+Bean+Co+4",
+                "https://via.placeholder.com/800x600/C8C8C8/333333?text=C8C8C8+Coffee+Bean+Co+5",
+                "https://via.placeholder.com/800x600/B8B8B8/333333?text=B8B8B8+Coffee+Bean+Co+6",
+                "https://via.placeholder.com/800x600/D8D8D8/333333?text=D8D8D8+Coffee+Bean+Co+7",
+                "https://via.placeholder.com/800x600/A8A8A8/333333?text=A8A8A8+Coffee+Bean+Co+8",
+                "https://via.placeholder.com/800x600/E0E0E0/333333?text=E0E0E0+Coffee+Bean+Co+9",
+                "https://via.placeholder.com/800x600/B0B0B0/333333?text=B0B0B0+Coffee+Bean+Co+10"
             ],
             story: "Development of a comprehensive brand identity for a new artisanal coffee shop. This included logo design, typography selection, color palette definition, and various mockups for packaging and signage. The goal was to convey a sense of warmth, craftsmanship, and community. The design process involved exploring various visual metaphors related to coffee, ultimately leading to a minimalist yet inviting aesthetic that resonates with target consumers."
         },
         4: {
             title: "Illustration: 'Forest Spirit'",
-            mainImage: "https://via.placeholder.com/800x600/C8C8C8/333333?text=Forest+Spirit+Main",
+            mainImage: "https://via.placeholder.com/800x600/C8C8C8/333333?text=C8C8C8+Forest+Spirit+Main",
             thumbnails: [
-                "https://via.placeholder.com/800x600/C8C8C8/333333?text=Forest+Spirit+1",
-                "https://via.placeholder.com/800x600/A0A0A0/333333?text=Forest+Spirit+2",
-                "https://via.placeholder.com/800x600/D0D0D0/333333?text=Forest+Spirit+3",
-                "https://via.placeholder.com/800x600/C0C0C0/333333?text=Forest+Spirit+4",
-                "https://via.placeholder.com/800x600/B8B8B8/333333?text=Forest+Spirit+5",
-                "https://via.placeholder.com/800x600/D8D8D8/333333?text=Forest+Spirit+6",
-                "https://via.placeholder.com/800x600/A8A8A8/333333?text=Forest+Spirit+7",
-                "https://via.placeholder.com/800x600/E0E0E0/333333?text=Forest+Spirit+8",
-                "https://via.placeholder.com/800x600/B0B0B0/333333?text=Forest+Spirit+9",
-                "https://via.placeholder.com/800x600/C0C0C0/333333?text=Forest+Spirit+10"
+                "https://via.placeholder.com/800x600/C8C8C8/333333?text=C8C8C8+Forest+Spirit+1",
+                "https://via.placeholder.com/800x600/A0A0A0/333333?text=A0A0A0+Forest+Spirit+2",
+                "https://via.placeholder.com/800x600/D0D0D0/333333?text=D0D0D0+Forest+Spirit+3",
+                "https://via.placeholder.com/800x600/C0C0C0/333333?text=C0C0C0+Forest+Spirit+4",
+                "https://via.placeholder.com/800x600/B8B8B8/333333?text=B8B8B8+Forest+Spirit+5",
+                "https://via.placeholder.com/800x600/D8D8D8/333333?text=D8D8D8+Forest+Spirit+6",
+                "https://via.placeholder.com/800x600/A8A8A8/333333?text=A8A8A8+Forest+Spirit+7",
+                "https://via.placeholder.com/800x600/E0E0E0/333333?text=E0E0E0+Forest+Spirit+8",
+                "https://via.placeholder.com/800x600/B0B0B0/333333?text=B0B0B0+Forest+Spirit+9",
+                "https://via.placeholder.com/800x600/C0C0C0/333333?text=C0C0C0+Forest+Spirit+10"
             ],
             story: "A whimsical digital illustration depicting a mythical forest guardian. The artwork utilizes a soft, ethereal color palette and intricate details to evoke a sense of magic and wonder. It was created using Procreate on an iPad, focusing on organic forms and atmospheric lighting. The narrative behind the piece explores the silent protectors of nature and the unseen forces that shape our world, inviting viewers to delve into a mystical realm."
         },
         5: {
             title: "App UI: 'Fitness Tracker'",
-            mainImage: "https://via.placeholder.com/800x600/B8B8B8/333333?text=Fitness+Tracker+Main",
+            mainImage: "https://via.placeholder.com/800x600/B8B8B8/333333?text=B8B8B8+Fitness+Tracker+Main",
             thumbnails: [
-                "https://via.placeholder.com/800x600/B8B8B8/333333?text=Fitness+Tracker+1",
-                "https://via.placeholder.com/800x600/C0C0C0/333333?text=Fitness+Tracker+2",
-                "https://via.placeholder.com/800x600/A0A0A0/333333?text=Fitness+Tracker+3",
-                "https://via.placeholder.com/800x600/D0D0D0/333333?text=Fitness+Tracker+4",
+                "https://via.placeholder.com/800x600/B8B8B8/333333?text=B8B8B8+Fitness+Tracker+1",
+                "https://via.placeholder.com/800x600/C0C0C0/333333?text=C0C0C0+Fitness+Tracker+2",
+                "https://via.placeholder.com/800x600/A0A0A0/333333?text=A0A0A0+Fitness+Tracker+3",
+                "https://via.placeholder.com/800x600/D0D0D0/333333?text=D0D0D0+Fitness+Tracker+4",
                 "https://via.placeholder.com/800x600/C8C8C8/333333?text=C8C8C8+Fitness+Tracker+5",
                 "https://via.placeholder.com/800x600/B8B8B8/333333?text=B8B8B8+Fitness+Tracker+6",
                 "https://via.placeholder.com/800x600/D8D8D8/333333?text=D8D8D8+Fitness+Tracker+7",
@@ -1056,7 +1012,7 @@
         },
         6: {
             title: "Poster: 'Music Festival'",
-            mainImage: "https://via.placeholder.com/800x600/D8D8D8/333333?text=Music+Festival+Main",
+            mainImage: "https://via.placeholder.com/800x600/D8D8D8/333333?text=D8D8D8+Music+Festival+Main",
             thumbnails: [
                 "https://via.placeholder.com/800x600/D8D8D8/333333?text=D8D8D8+Music+Festival+1",
                 "https://via.placeholder.com/800x600/C0C0C0/333333?text=C0C0C0+Music+Festival+2",
@@ -1203,8 +1159,8 @@
     const flowerCursor = document.getElementById('flower-cursor'); // Bunga (kursor utama)
     const beeFollower = document.getElementById('bee-follower');   // Lebah (objek yang mengikuti)
     
-    let idleTimeout; // Timer untuk mendeteksi idle
-    let idleCircleAnimationTimeout; // Timer untuk fase circling
+    let idleTimeout; // Timer untuk mendeteksi idle utama
+    let idleCircleAnimationTimeout; // Timer untuk fase mengelilingi
     let idlePollenBurstInterval; // Interval untuk semburan serbuk saat idle
 
     let targetCursorX = 0; // Target X dari kursor mouse
@@ -1215,37 +1171,67 @@
     let currentBeeY = 0;    // Posisi Y lebah yang diperhalus
 
     let lastTrailDotTime = 0;
-    const trailDotInterval = 80; // Interval waktu (ms) untuk membuat titik jejak (lebah)
-    const maxTrailDots = 30;     // Jumlah maksimum titik jejak (lebah)
+    const trailDotInterval = 50; // Interval waktu (ms) untuk membuat titik jejak (lebah)
+    const maxTrailDots = 10;     // Jumlah maksimum titik jejak (lebah)
 
-    // Deteksi pergerakan mouse
+    // Definisikan @keyframes dinamis (penting jika kode digabungkan)
+    const dynamicKeyframes = `
+        @keyframes beeVibrate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-48%, -52%) rotate(1deg); }
+            50% { transform: translate(-50%, -50%) rotate(0deg); }
+            75% { transform: translate(-52%, -48%) rotate(-1deg); }
+            100% { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+        @keyframes beeCircle { 
+            0% { transform: translate(-50%, -50%) translateX(15px) translateY(-15px) rotate(0deg); } /* Posisi awal relatif dari pusat bunga */
+            25% { transform: translate(-50%, -50%) translateX(20px) translateY(0px) rotate(90deg); }
+            50% { transform: translate(-50%, -50%) translateX(15px) translateY(15px) rotate(180deg); }
+            75% { transform: translate(-50%, -50%) translateX(0px) translateY(20px) rotate(270deg); } /* Menjauh sedikit */
+            100% { transform: translate(-50%, -50%) translateX(15px) translateY(-15px) rotate(360deg); }
+        }
+        @keyframes pollenBurst {
+            0% { opacity: 0.9; transform: scale(1) translateX(0) translateY(0); }
+            100% { opacity: 0; transform: scale(0) translateX(var(--dx)) translateY(var(--dy)); }
+        }
+        @keyframes fadeOutPollen {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+    `;
+    const styleSheet = document.createElement('style');
+    styleSheet.type = 'text/css';
+    styleSheet.innerText = dynamicKeyframes;
+    document.head.appendChild(styleSheet);
+
+
+    // Update mouse position and manage cursor states
     document.addEventListener('mousemove', (e) => {
         targetCursorX = e.clientX;
         targetCursorY = e.clientY;
         
         // --- LOGIKA SAAT KURSOR BERGERAK ---
-        // 1. Sembunyikan lebah idle jika terlihat
-        beeFollower.style.opacity = 0; 
+        beeFollower.style.opacity = 1; // Lebah terlihat saat bergerak
         beeFollower.style.animation = 'none'; // Hentikan animasi bergetar/melingkar
         
-        // 2. Hapus kelas 'idle' dari body (penting untuk transisi dari idle ke bergerak)
+        // Hapus kelas 'idle' dari body
         document.body.classList.remove('idle');
 
-        // 3. Bersihkan semua timer/interval idle yang mungkin sedang berjalan
+        // Bersihkan semua timer/interval idle yang mungkin sedang berjalan
         clearTimeout(idleTimeout);
         clearTimeout(idleCircleAnimationTimeout);
         clearInterval(idlePollenBurstInterval);
 
-        // 4. Buat jejak lebah
+        // Buat jejak lebah
         const now = Date.now();
         if (now - lastTrailDotTime > trailDotInterval) {
             lastTrailDotTime = now;
             const trailDot = document.createElement('div');
-            trailDot.classList.add('cursor-trail-dot'); // Ini adalah lebah jejak
+            trailDot.classList.add('cursor-trail-dot'); // Ini adalah lebah jejak (menggunakan gambar lebah)
             
-            // Posisi titik jejak sedikit di belakang kursor atau agak acak
-            trailDot.style.left = `${e.clientX + (Math.random() - 0.5) * 5}px`;
-            trailDot.style.top = `${e.clientY + (Math.random() - 0.5) * 5}px`;
+            // Posisi titik jejak sedikit di belakang lebah
+            trailDot.style.left = `${currentBeeX + (Math.random() - 0.5) * 5}px`;
+            trailDot.style.top = `${currentBeeY + (Math.random() - 0.5) * 5}px`;
             
             document.body.appendChild(trailDot);
 
@@ -1256,22 +1242,18 @@
             }
         }
 
-        // 5. Mulai timer untuk mendeteksi idle lagi
+        // Mulai timer untuk mendeteksi idle lagi (delay 4 detik)
         idleTimeout = setTimeout(() => {
-            // --- LOGIKA SAAT KURSOR IDLE (SETELAH DELAY 0.5 DETIK) ---
+            // --- LOGIKA SAAT KURSOR IDLE (SETELAH 4 DETIK TIDAK BERGERAK) ---
             document.body.classList.add('idle'); // Tambahkan kelas 'idle' ke body
             
             // Fase 1: Lebah mengelilingi selama 2 detik
             beeFollower.style.opacity = 1;
-            beeFollower.style.animation = 'beeCircle 2s linear forwards'; // Lebah mengelilingi
+            beeFollower.style.animation = 'beeCircle 2s linear forwards'; // Lebah mengelilingi selama 2 detik
 
-            // Setel posisi awal lebah untuk mengelilingi (relatif dari posisi bunga saat ini)
-            currentBeeX = currentFlowerX + 20; // Mulai dari offset dari bunga
-            currentBeeY = currentFlowerY - 20; // Mulai dari offset dari bunga
-            beeFollower.style.left = `${currentBeeX}px`;
-            beeFollower.style.top = `${currentBeeY}px`;
-
-
+            // Setel posisi awal lebah untuk mengelilingi (relative terhadap posisi bunga saat itu)
+            // currentBeeX dan currentBeeY akan diatur di animateCursorPositions
+            
             idleCircleAnimationTimeout = setTimeout(() => {
                 // Setelah 2 detik mengelilingi, jika masih idle, masuk fase idle penuh
                 if (document.body.classList.contains('idle')) {
@@ -1279,24 +1261,23 @@
                     beeFollower.style.animation = 'beeVibrate 0.3s infinite ease-in-out'; // Lebah getar di tempat
 
                     // Atur posisi lebah agar menempel di bunga (offset y dari bunga)
-                    beeFollower.style.left = `${currentFlowerX}px`;
-                    beeFollower.style.top = `${currentFlowerY - 15}px`; 
-
+                    // Ini juga diatur di animateCursorPositions
+                    
                     // Mulai semburan serbuk bunga secara terus-menerus
-                    burstPollen(currentFlowerX, currentFlowerY + 5); // Semburkan serbuk bunga awal
                     idlePollenBurstInterval = setInterval(() => {
-                        burstPollen(currentFlowerX, currentFlowerY + 5); // Semburkan terus-menerus
+                        // Semburkan dari posisi lebah
+                        burstPollen(currentBeeX, currentBeeY + 5, false, 4, 0.8); // Serbuk kecil saat idle
                     }, 200); // Setiap 200ms
                 }
             }, 2000); // Durasi mengelilingi (2 detik)
 
-        }, 500); // Deteksi idle setelah 0.5 detik tidak bergerak
+        }, 4000); // Deteksi idle utama setelah 4 detik tidak bergerak
     });
 
-    // Animation loop for flower cursor lag and bee follower
-    function animateCursorLag() {
-        // Smoothly interpolate flower cursor position towards target
-        currentFlowerX += (targetCursorX - currentFlowerX) * 0.1; // Bunga lebih lambat (0.1 damping factor)
+    // Animation loop for flower cursor and bee follower
+    function animateCursorPositions() {
+        // Smoothly interpolate flower cursor position towards target mouse position
+        currentFlowerX += (targetCursorX - currentFlowerX) * 0.1; // Bunga mengikuti dengan lag 0.1
         currentFlowerY += (targetCursorY - currentFlowerY) * 0.1;
 
         flowerCursor.style.left = `${currentFlowerX}px`;
@@ -1304,35 +1285,50 @@
         
         // Lebah mengikuti posisi bunga kursor saat TIDAK idle
         if (!document.body.classList.contains('idle')) {
-            let lagFactorBee = 0.2; // Lebah mengikuti bunga dengan 0.2 damping
+            let lagFactorBee = 0.025; // Lebih lambat (4x delay) -> 0.1 / 4 = 0.025
             currentBeeX += (currentFlowerX - currentBeeX) * lagFactorBee;
             currentBeeY += (currentFlowerY - 15 - currentBeeY) * lagFactorBee; // 15px di atas bunga
 
             beeFollower.style.left = `${currentBeeX}px`;
             beeFollower.style.top = `${currentBeeY}px`;
-            beeFollower.style.opacity = 1; // Pastikan lebah terlihat saat mengikuti
+            // Opacity sudah 1 saat bergerak
         } else {
-            // Saat idle, lebah diam di atas bunga (posisi sudah diatur di mousemove/idleTimeout)
-            // Cukup pastikan posisinya tetap update jika bunga bergerak sedikit (misal karena scroll)
+            // Saat idle, lebah menempel pada bunga (posisinya diatur relatif terhadap bunga)
+            // Posisikan lebah agar tetap di atas bunga, bahkan saat bunga bergerak sedikit
             beeFollower.style.left = `${currentFlowerX}px`;
-            beeFollower.style.top = `${currentFlowerY - 15}px`;
+            beeFollower.style.top = `${currentFlowerY - 15}px`; 
         }
 
-        requestAnimationFrame(animateCursorLag);
+
+        requestAnimationFrame(animateCursorPositions);
     }
-    animateCursorLag(); // Start the lag animation loop
+    animateCursorPositions(); // Start the animation loop
 
     // Function to burst pollen (used for both idle burst and click burst)
-    function burstPollen(x, y) {
-        const numPollen = 10;
+    // Parameter baru: size, duration
+    function burstPollen(x, y, isClick = false, customSize = 0, customDuration = 0) {
+        const numPollen = isClick ? 150 : 5; // 150 serbuk saat klik, 5 jejak/idle
+        const minDistance = isClick ? 20 : 5; // Menyebar lebih jauh saat klik
+        const maxDistance = isClick ? (25 * 3) : 15; // Jarak sebaran 3x ukuran kursor bunga (25px * 3 = 75px)
+        
+        // Ukuran partikel: 3x kursor (75px) / jumlah partikel untuk dapat ukuran kecil
+        const pollenSize = customSize > 0 ? customSize : (isClick ? 2 : 4); // Ukuran dot sangat kecil (2px)
+        const animationDuration = customDuration > 0 ? customDuration : (isClick ? 1 : 0.8); // Durasi animasi
+
         for (let i = 0; i < numPollen; i++) {
             const pollen = document.createElement('div');
-            pollen.classList.add('pollen-burst-dot');
+            pollen.classList.add('pollen-burst-dot'); // Gunakan kelas yang benar
+            
+            // Atur ukuran dan durasi animasi berdasarkan parameter
+            pollen.style.width = `${pollenSize}px`;
+            pollen.style.height = `${pollenSize}px`;
+            pollen.style.animation = `pollenBurst ${animationDuration}s ease-out forwards`;
+
             pollen.style.left = `${x}px`;
             pollen.style.top = `${y}px`;
             
             const angle = Math.random() * Math.PI * 2;
-            const distance = Math.random() * 30 + 10;
+            const distance = Math.random() * (maxDistance - minDistance) + minDistance;
             pollen.style.setProperty('--dx', `${distance * Math.cos(angle)}px`);
             pollen.style.setProperty('--dy', `${distance * Math.sin(angle)}px`);
             
@@ -1348,20 +1344,10 @@
     // Cursor Click Animation (Effect of pollen burst)
     document.addEventListener('mousedown', (e) => {
         // Langsung semburkan serbuk bunga saat klik (dari posisi klik)
-        burstPollen(e.clientX, e.clientY);
-        
-        // Efek ledakan dot dari klik (yang hitam)
-        const clickEffect = document.createElement('div');
-        clickEffect.classList.add('cursor-click-effect');
-        clickEffect.style.left = `${e.clientX}px`;
-        clickEffect.style.top = `${e.clientY}px`;
-        document.body.appendChild(clickEffect);
-
-        clickEffect.addEventListener('animationend', () => {
-            clickEffect.remove();
-        });
+        // Ukuran 3x kursor (75px) di sini tidak lagi ukuran dot-nya, tapi jarak sebarannya
+        burstPollen(e.clientX, e.clientY, true, 2); // 2px dot, isClick=true
     });
 });
-    </script>
+</script>
 </body>
 </html>
